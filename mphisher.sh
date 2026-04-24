@@ -146,7 +146,7 @@ reset_color() {
 
 ## Kill already running process
 kill_pid() {
-	check_PID="php cloudflared loclx"
+	check_PID="php cloudflared loclx ngrok"
 	for process in ${check_PID}; do
 		if [[ $(pidof ${process}) ]]; then # Check for Process
 			killall ${process} > /dev/null 2>&1 # Kill the Process
@@ -327,6 +327,25 @@ install_localxpose() {
 			download 'https://api.localxpose.io/api/v2/downloads/loclx-linux-amd64.zip' 'loclx'
 		else
 			download 'https://api.localxpose.io/api/v2/downloads/loclx-linux-386.zip' 'loclx'
+		fi
+	fi
+}
+
+## Install Ngrok
+install_ngrok() {
+	if [[ -e ".server/ngrok" ]]; then
+		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${GREEN} Ngrok already installed."
+	else
+		echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing Ngrok..."${WHITE}
+		arch=`uname -m`
+		if [[ ("$arch" == *'arm'*) || ("$arch" == *'Android'*) ]]; then
+			download 'https://bin.equinox.io/c/bNyj1mLmxM4/ngrok-v3-stable-linux-arm.tgz' 'ngrok'
+		elif [[ "$arch" == *'aarch64'* ]]; then
+			download 'https://bin.equinox.io/c/bNyj1mLmxM4/ngrok-v3-stable-linux-arm64.tgz' 'ngrok'
+		elif [[ "$arch" == *'x86_64'* ]]; then
+			download 'https://bin.equinox.io/c/bNyj1mLmxM4/ngrok-v3-stable-linux-amd64.tgz' 'ngrok'
+		else
+			download 'https://bin.equinox.io/c/bNyj1mLmxM4/ngrok-v3-stable-linux-386.tgz' 'ngrok'
 		fi
 	fi
 }
@@ -517,6 +536,7 @@ start_custom_domain() {
 		domain=$(grep -o '"domain":"[^"]*' admin/config.json | cut -d'"' -f4)
 		conn_type=$(grep -o '"conn_type":"[^"]*' admin/config.json | cut -d'"' -f4)
 		tunnel_token=$(grep -o '"tunnel_token":"[^"]*' admin/config.json | cut -d'"' -f4)
+		ngrok_auth=$(grep -o '"ngrok_auth":"[^"]*' admin/config.json | cut -d'"' -f4)
 	else
 		echo -e "\n${RED}[${WHITE}!${RED}]${RED} No domain configured in Admin Panel!"
 		read -p "${RED}[${WHITE}-${RED}]${GREEN} Enter Domain manually (e.g. example.com): ${BLUE}" domain
@@ -535,6 +555,17 @@ start_custom_domain() {
 			sleep 2 && termux-chroot ./.server/cloudflared tunnel run --token "$tunnel_token" > /dev/null 2>&1 &
 		else
 			sleep 2 && ./.server/cloudflared tunnel run --token "$tunnel_token" > /dev/null 2>&1 &
+		fi
+	elif [[ "$conn_type" == "ngrok" && -n "$ngrok_auth" ]]; then
+		install_ngrok
+		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Configuring Ngrok Authtoken..."
+		./.server/ngrok config add-authtoken "$ngrok_auth" > /dev/null 2>&1
+		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Connecting via Ngrok..."
+		echo -e "${CYAN} Domain: $domain"
+		if [[ `command -v termux-chroot` ]]; then
+			sleep 2 && termux-chroot ./.server/ngrok http "$PORT" --domain="$domain" > /dev/null 2>&1 &
+		else
+			sleep 2 && ./.server/ngrok http "$PORT" --domain="$domain" > /dev/null 2>&1 &
 		fi
 	else
 		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Direct Connection Mode"
