@@ -1,189 +1,108 @@
-<!-- Zphisher -->
+<p align="center">
+  <img src="assets/logo.png" width="250" alt="Mphisher Logo">
+</p>
+
+<h1 align="center">Mphisher</h1>
 
 <p align="center">
-  <img src=".github/misc/logo.png">
+  <img src="https://img.shields.io/badge/Version-2.3.5-00f2ff?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Author-Easir%20Iqbal%20Mahi-7000ff?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Platform-Linux%20|%20Termux-ff3366?style=for-the-badge">
+  <img src="https://img.shields.io/badge/License-GPLv3-00ff88?style=for-the-badge">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.3.5-green?style=for-the-badge">
-  <img src="https://img.shields.io/github/license/htr-tech/zphisher?style=for-the-badge">
-  <img src="https://img.shields.io/github/stars/htr-tech/zphisher?style=for-the-badge">
-  <img src="https://img.shields.io/github/issues/htr-tech/zphisher?color=red&style=for-the-badge">
-  <img src="https://img.shields.io/github/forks/htr-tech/zphisher?color=teal&style=for-the-badge">
+  <b>A professional-grade, automated phishing tool with 30+ high-fidelity templates and a premium management dashboard.</b>
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Author-htr--tech-blue?style=flat-square">
-  <img src="https://img.shields.io/badge/Open%20Source-Yes-darkgreen?style=flat-square">
-  <img src="https://img.shields.io/badge/Maintained%3F-Yes-lightblue?style=flat-square">
-  <img src="https://img.shields.io/badge/Written%20In-Bash-darkcyan?style=flat-square">
-  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhtr-tech%2Fzphisher&title=Visitors&edge_flat=false"/></a>
-</p>
+---
 
-<p align="center"><b>A beginners friendly, Automated phishing tool with 30+ templates.</b></p>
+### ⚠️ Disclaimer
 
-##
+> [!CAUTION]
+> **Educational Purpose Only**: This tool is developed strictly for educational and ethical security testing purposes. Unauthorized use of this tool for malicious activities is illegal and strictly prohibited. The author (Easir Iqbal Mahi) and contributors assume no liability for any misuse or damage caused by this program.
 
-<h3><p align="center">Disclaimer</p></h3>
+---
 
-<i>Any actions and or activities related to <b>Zphisher</b> is solely your responsibility. The misuse of this toolkit can result in <b>criminal charges</b> brought against the persons in question. <b>The contributors will not be held responsible</b> in the event any criminal charges be brought against any individuals misusing this toolkit to break the law.
+### 🚀 Features
 
-<b>This toolkit contains materials that can be potentially damaging or dangerous for social media</b>. Refer to the laws in your province/country before accessing, using,or in any other way utilizing this in a wrong way.
+Mphisher is designed to be the most comprehensive and user-friendly phishing toolkit available.
 
-<b>This Tool is made for educational purposes only</b>. Do not attempt to violate the law with anything contained here. <b>If this is your intention, then Get the hell out of here</b>!
+- **🎨 30+ Premium Templates**: High-fidelity login pages for Facebook, Google, Instagram, Microsoft, Netflix, and more.
+- **⚡ One-Click Deployment**: Fully automated server setup and tunnel initialization.
+- **🛠️ Multiple Tunneling Engines**:
+  - **Localhost**: For internal network testing.
+  - **Cloudflared**: Secure tunnels without port forwarding.
+  - **LocalXpose**: Powerful alternative for remote access.
+- **🖥️ Premium Admin Panel**: A beautiful, glassmorphism-themed web interface to manage your hits in real-time.
+- **🔗 Custom Domain Support**: Easily connect your own domain via the admin panel.
+- **📱 Termux Optimized**: Native support for Android via Termux with full functionality.
 
-It only demonstrates "how phishing works". <b>You shall not misuse the information to gain unauthorized access to someones social media</b>. However you may try out this at your own risk.</i>
+---
 
-##
+### 🛠️ Installation
 
-### Features
+#### **Standard Linux**
+```bash
+# Clone the repository
+git clone --depth=1 https://github.com/sosuke-d-mahi/mphisher.git
 
-- Latest and updated login pages.
-- Beginners friendly
-- Multiple tunneling options
-  - Localhost
-  - Cloudflared
-  - LocalXpose
-- Mask URL support 
-- Docker support
+# Navigate to the directory
+cd mphisher
 
-##
-
-### Installation
-
-- Just, Clone this repository -
-  ```
-  git clone --depth=1 https://github.com/htr-tech/zphisher.git
-  ```
-
-- Now go to cloned directory and run `zphisher.sh` -
-  ```
-  $ cd zphisher
-  $ bash zphisher.sh
-  ```
-
-- On first launch, It'll install the dependencies and that's it. ***Zphisher*** is installed.
-
-##
-
-### Installation (Termux)
-You can easily install zphisher in Termux by using tur-repo
+# Launch Mphisher
+bash mphisher.sh
 ```
-$ pkg install tur-repo
-$ pkg install zphisher
-$ zphisher
+
+#### **Termux (Android)**
+```bash
+# Install dependencies
+pkg install git php curl -y
+
+# Clone and run
+git clone --depth=1 https://github.com/sosuke-d-mahi/mphisher.git
+cd mphisher
+bash mphisher.sh
 ```
-### A Note : 
-***Termux discourages hacking*** .. So never discuss anything related to *zphisher* in any of the termux discussion groups. For more check : [wiki](https://wiki.termux.com/wiki/Hacking)
 
-##
+---
 
-<p align="left">
-  <a href="https://shell.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/htr-tech/zphisher.git&tutorial=README.md" target="_blank"><img src="https://gstatic.com/cloudssh/images/open-btn.svg"></a>
-</p>
+### 💎 Premium Admin Panel
 
-##
+Mphisher now includes a state-of-the-art **Web Dashboard** to monitor your campaigns.
 
-### Installation via ".deb" file
+- **Real-time Monitoring**: View credentials and visitor IPs as they arrive.
+- **Domain Configuration**: Set up your custom phishing domains with a single click.
+- **Responsive Design**: Manage your tool from your phone or desktop.
 
-- Download `.deb` files from the [**Latest Release**](https://github.com/htr-tech/zphisher/releases/latest)
-- If you are using ***termux*** then download the `*_termux.deb`
+**To start the panel:**
+```bash
+bash run-admin.sh
+```
+Access at: `http://localhost:8888`
 
-- Install the `.deb` file by executing
-  ```
-  apt install <your path to deb file>
-  ```
-  Or
-  ```
-  $ dpkg -i <your path to deb file>
-  $ apt install -f
-  ```
+---
 
-##
+### 🤝 Contributing
 
-### Run on Docker
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-- Docker Image Mirror:
-  - **DockerHub** : 
-    ```
-    docker pull htrtech/zphisher
-    ```
-  - **GHCR** : 
-    ```
-    docker pull ghcr.io/htr-tech/zphisher:latest
-    ```
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-- By using the wrapper script [**run-docker.sh**](https://raw.githubusercontent.com/htr-tech/zphisher/master/run-docker.sh)
+---
 
-  ```
-  $ curl -LO https://raw.githubusercontent.com/htr-tech/zphisher/master/run-docker.sh
-  $ bash run-docker.sh
-  ```
-- Temporary Container
+### 👨‍💻 Author
 
-  ```
-  docker run --rm -ti htrtech/zphisher
-  ```
-  - Remember to mount the `auth` directory.
+**Easir Iqbal Mahi**
+- GitHub: [@sosuke-d-mahi](https://github.com/sosuke-d-mahi)
+- Tool Version: 2.3.5
 
-##
+---
 
-<details>
-  <summary><h3>Dependencies</h3></summary>
-
-<b>Zphisher</b> requires following programs to run properly - 
-- `git`
-- `curl`
-- `php`
-
-> All the dependencies will be installed automatically when you run **Zphisher** for the first time.
-</details>
-
-<details>
-  <summary><h3>Tested on</h3></summary>
-
-- **Ubuntu**
-- **Debian**
-- **Arch**
-- **Manjaro**
-- **Fedora**
-- **Termux**
-</details>
-
-##
-
-<h3 align="center"><i>:: Workflow ::</i></h3>
 <p align="center">
-<img src=".github/misc/workflow.gif"/>
+  Made with ❤️ by Easir Iqbal Mahi
 </p>
-
-##
-
-### Find Me on:
-<p align="left">
-  <a href="https://tahmidrayat.is-a.dev" target="_blank"><img src="https://img.shields.io/badge/Socials-grey?style=for-the-badge&logo=linktree"></a>
-  <a href="https://github.com/htr-tech" target="_blank"><img src="https://img.shields.io/badge/Github-blue?style=for-the-badge&logo=github"></a>
-</p>
-
-
-### *Thanks to all contributors*:
-
-<table>
-  <tr align="center">
-    <td><a href="https://github.com/1RaY-1"><img src="https://avatars.githubusercontent.com/u/78962948?s=100" /><br /><sub><b>1RaY-1</b></sub></a></td>
-    <td><a href="https://github.com/adi1090x"><img src="https://avatars.githubusercontent.com/u/26059688?s=100" /><br /><sub><b>Aditya Shakya</b></sub></a></td>
-    <td><a href="https://github.com/AliMilani"><img src="https://avatars.githubusercontent.com/u/59066012?s=100" /><br /><sub><b>Ali Milani</b></sub></a></td>
-    <td><a href="https://github.com/Meht-evaS"><img src="https://avatars.githubusercontent.com/u/57435273?s=100" /><br /><sub><b>AmnesiA</b></sub></a></td>
-    <td><a href="https://github.com/KasRoudra"><img src="https://avatars.githubusercontent.com/u/78908440?s=100" /><br /><sub><b>KasRoudra</b></sub></a></td>
-   <td><a href="https://github.com/MoisesTapia"><img src="https://avatars.githubusercontent.com/u/28166400?s=100" /><br /><sub><b>Moises Tapia</b></sub></a></td>
-  </tr>
-  <tr align="center">
-   <td><a href="https://github.com/E343IO"><img src="https://avatars.githubusercontent.com/u/74646789?s=100" /><br /><sub><b>Mr.Derek</b></sub></a></td>
-    <td><a href="https://github.com/BDhackers009"><img src="https://avatars.githubusercontent.com/u/67186139?s=100" /><br /><sub><b>Mustakim Ahmed</b></sub></a></td>
-    <td><a href="https://github.com/sepp0"><img src="https://avatars.githubusercontent.com/u/36642137?s=100" /><br /><sub><b>sepp0</b></sub></a></td>
-    <td><a href="https://github.com/TripleHat"><img src="https://avatars.githubusercontent.com/u/68332137?s=100" /><br /><sub><b>TripleHat</b></sub></a></td>
-    <td><a href="https://github.com/Yisus7u7"><img src="https://avatars.githubusercontent.com/u/64093255?s=100" /><br /><sub><b>Yisus7u7</b></sub></a></td>
-  </tr>
-<table>
-
-<!-- // -->

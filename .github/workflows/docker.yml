@@ -1,47 +1,34 @@
-name: 'Build & Push Docker Image'
+name: Docker CI
 
 on:
-  schedule:
-    - cron: "0 0 * * 0" # Every Sunday
-  workflow_dispatch:
-
-env:
-  CI: true
-  DOCKER_BUILDKIT: 1
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Build Image
+      - uses: actions/checkout@v2
+
+      - name: Build and Push to GHCR
         run: |
-          # Build Docker Image for DockerHub
-          docker build --tag htrtech/zphisher:latest .
-
-          # Tag Docker Image for GHCR
-          docker tag htrtech/zphisher:latest ghcr.io/htr-tech/zphisher:latest
-
-      - name: Login to GHCR
-        if: github.repository == 'htr-tech/zphisher' && github.ref == 'refs/heads/master'
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build --tag ghcr.io/sosuke-d-mahi/mphisher:latest .
+          docker push ghcr.io/sosuke-d-mahi/mphisher:latest
+        if: github.repository == 'sosuke-d-mahi/mphisher' && github.ref == 'refs/heads/master'
 
       - name: Login to DockerHub
-        if: github.repository == 'htr-tech/zphisher' && github.ref == 'refs/heads/master'
-        uses: docker/login-action@v2
+        uses: docker/login-action@v1
         with:
-          username: "htrtech"
-          password: ${{ secrets.DOCKER_TOKEN }}
+          username: "sosuke-d-mahi"
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        if: github.repository == 'sosuke-d-mahi/mphisher' && github.ref == 'refs/heads/master'
 
-      - name: Push
-        if: github.repository == 'htr-tech/zphisher' && github.ref == 'refs/heads/master'
+      - name: Build and Push to DockerHub
         run: |
-          # Push to DockerHub
-          docker push htrtech/zphisher:latest
-          # Push to GHCR
-          docker push ghcr.io/htr-tech/zphisher:latest
+          docker build --tag sosuke-d-mahi/mphisher:latest .
+          docker push sosuke-d-mahi/mphisher:latest
+        if: github.repository == 'sosuke-d-mahi/mphisher' && github.ref == 'refs/heads/master'
+

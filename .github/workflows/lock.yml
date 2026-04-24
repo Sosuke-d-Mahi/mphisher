@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lock Issues
-        if: github.repository == 'htr-tech/zphisher' && github.ref == 'refs/heads/master'
+        if: github.repository == 'sosuke-d-mahi/mphisher' && github.ref == 'refs/heads/master'
         uses: dessant/lock-threads@v3
         with:
           process-only: 'issues'
@@ -30,3 +30,4 @@ jobs:
             This issue has been automatically locked since there
             has not been any recent activity after it was closed.
             Please open a new issue for related bugs/questions.
+
