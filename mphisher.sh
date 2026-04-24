@@ -161,7 +161,7 @@ check_update(){
 	new_version=$(curl -s "${relase_url}" | grep '"tag_name":' | awk -F\" '{print $4}')
 	tarball_url="https://github.com/sosuke-d-mahi/mphisher/archive/refs/tags/${new_version}.tar.gz"
 
-	if [[ $new_version != $__version__ ]]; then
+	if [[ -n "$new_version" && "$new_version" != "$__version__" ]]; then
 		echo -ne "${ORANGE}update found\n"${WHITE}
 		sleep 2
 		echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${ORANGE} Downloading Update..."
